@@ -1,6 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Rocket, Server, Boxes, Cloud, Cpu } from "lucide-react";
+import {
+  Mail,
+  Github,
+  Linkedin,
+  Rocket,
+  Server,
+  Boxes,
+  Cloud,
+  Cpu,
+  ShieldCheck,
+  Clock,
+  FolderKanban,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +35,15 @@ type Project = {
   desc: string;
   tags: string[];
   href?: string;
+};
+
+type Experience = {
+  period: string;
+  role: string;
+  org: string;
+  summary: string;
+  highlights: string[];
+  stack: string[];
 };
 
 const PROJECTS: Project[] = [
@@ -52,6 +73,63 @@ const SKILLS = [
   "AWS", "GCP", "MySQL", "Python", "Streamlit"
 ];
 
+const STATS = [
+  {
+    label: "운영 경험",
+    value: "10+년",
+    desc: "엔터프라이즈 & 금융권 프로젝트",
+    icon: <Clock className="h-5 w-5" />,
+  },
+  {
+    label: "주요 프로젝트",
+    value: "35건",
+    desc: "대규모 인프라 구축 및 마이그레이션",
+    icon: <FolderKanban className="h-5 w-5" />,
+  },
+  {
+    label: "안정성 지표",
+    value: "99.95%",
+    desc: "SLA 달성률 & 보안 감사 통과",
+    icon: <ShieldCheck className="h-5 w-5" />,
+  },
+];
+
+const EXPERIENCES: Experience[] = [
+  {
+    period: "2023 — 2024",
+    role: "DevOps 리드 엔지니어",
+    org: "삼성전자 RCS DDO",
+    summary: "클라우드 네이티브 전환과 배포 자동화 체계를 총괄",
+    highlights: [
+      "EKS 기반 멀티존 아키텍처와 GitOps 파이프라인 구축",
+      "Terraform · Argo CD로 IaC 및 배포 자동화 도입",
+    ],
+    stack: ["AWS", "EKS", "Terraform", "Argo CD", "GitOps"],
+  },
+  {
+    period: "2022 — 2023",
+    role: "SRE/DevOps 컨설턴트",
+    org: "KB국민카드 MSP",
+    summary: "금융권 Kubernetes 운영 안정화 및 관제 고도화",
+    highlights: [
+      "GitLab CI · Argo Rollouts 기반 점진적 배포 설계",
+      "Prometheus/Grafana, Loki 스택으로 모니터링 표준화",
+    ],
+    stack: ["Kubernetes", "GitLab CI", "Argo Rollouts", "Prometheus", "Grafana"],
+  },
+  {
+    period: "2019 — 2022",
+    role: "플랫폼 엔지니어",
+    org: "다수 공공·금융 인프라",
+    summary: "보안·네트워크를 포함한 통합 운영 플랫폼 구축",
+    highlights: [
+      "AD/보안 인프라 프로젝트 PL/PM, 재해복구 시나리오 수립",
+      "자동화 스크립트와 파이프라인으로 운영 표준화",
+    ],
+    stack: ["Ansible", "Python", "VMware", "Security", "DR"],
+  },
+];
+
 // 모든 프로젝트의 태그를 수집해서 정렬
 const ALL_TAGS = Array.from(
   new Set(PROJECTS.flatMap((p) => p.tags))
@@ -79,21 +157,60 @@ export default function Portfolio() {
     });
   }, [query, activeTags]);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 text-foreground">
+    <div className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <motion.div
+          className="absolute left-1/2 top-[-18%] h-[22rem] w-[22rem] -translate-x-1/2 rounded-full bg-gradient-to-br from-primary/40 via-sky-500/40 to-purple-500/40 blur-[120px]"
+          animate={{
+            rotate: [0, 12, -8, 0],
+            scale: [1, 1.05, 0.98, 1],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-[-22%] left-[10%] h-[30rem] w-[30rem] rounded-full bg-gradient-to-tr from-sky-400/40 via-cyan-400/30 to-emerald-400/30 blur-[140px]"
+          animate={{
+            x: [0, 40, -20, 0],
+            y: [0, 20, -10, 0],
+            scale: [1, 0.95, 1.02, 1],
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute right-[-14%] top-1/3 h-[30rem] w-[30rem] rounded-full bg-gradient-to-bl from-fuchsia-500/40 via-purple-500/30 to-primary/30 blur-[140px]"
+          animate={{
+            x: [0, -30, 20, 0],
+            y: [0, -15, 12, 0],
+            scale: [1, 1.08, 0.96, 1],
+          }}
+          transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
       {/* Top Bar */}
-      <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-background/70 bg-background/60 border-b">
-        <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-50 border-b bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2 font-semibold">
-            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 via-sky-500/20 to-purple-500/30 text-primary">
               <Rocket className="h-4 w-4" />
             </span>
             <span>이동수 · DevOps & Cloud</span>
           </div>
-          <nav className="hidden md:flex items-center gap-4 text-sm">
-            <a href="#about" className="hover:text-primary">소개</a>
-            <a href="#projects" className="hover:text-primary">프로젝트</a>
-            <a href="#skills" className="hover:text-primary">기술스택</a>
-            <a href="#contact" className="hover:text-primary">연락</a>
+          <nav className="hidden items-center gap-2 text-sm md:flex">
+            {[
+              { href: "#about", label: "소개" },
+              { href: "#projects", label: "프로젝트" },
+              { href: "#skills", label: "기술스택" },
+              { href: "#contact", label: "연락" },
+            ].map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="group relative inline-flex items-center gap-1 rounded-full px-3 py-1 transition hover:text-primary"
+              >
+                <span className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-r from-primary/10 via-sky-500/10 to-purple-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <span className="relative">{item.label}</span>
+              </a>
+            ))}
           </nav>
           <div className="flex items-center gap-2">
             <ThemeToggle />
@@ -105,14 +222,19 @@ export default function Portfolio() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-4 pt-14 pb-10">
+      <section className="mx-auto max-w-6xl px-4 pt-16 pb-12">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Badge variant="secondary" className="mb-4 rounded-xl">SRE · DevOps · Cloud</Badge>
+            <Badge
+              variant="secondary"
+              className="mb-4 rounded-xl border-0 bg-gradient-to-r from-sky-500/90 via-primary/90 to-purple-500/90 text-primary-foreground shadow"
+            >
+              SRE · DevOps · Cloud
+            </Badge>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
               안녕하세요, <span className="text-primary">이동수</span>입니다.
             </h1>
@@ -122,17 +244,32 @@ export default function Portfolio() {
               복잡한 환경을 단순화하고 운영을 코드로 관리합니다.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild className="rounded-2xl">
+              <Button asChild className="rounded-2xl bg-gradient-to-r from-primary via-purple-600 to-sky-500 text-primary-foreground shadow-lg shadow-primary/20 transition hover:scale-[1.02]">
                 <a href="#contact"><Mail className="mr-2 h-4 w-4" />프로젝트 문의</a>
               </Button>
-              <Button asChild variant="outline" className="rounded-2xl">
+              <Button asChild variant="outline" className="rounded-2xl border-primary/40 text-primary hover:bg-primary/10">
                 <a href="#resume">이력서 보기</a>
               </Button>
             </div>
 
-            <div className="mt-6 grid grid-cols-3 sm:grid-cols-6 md:grid-cols-8 gap-2">
-              {SKILLS.slice(0, 16).map((s) => (
-                <Badge key={s} variant="outline" className="rounded-xl justify-center">{s}</Badge>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              {STATS.map((stat, idx) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 + idx * 0.05 }}
+                  className="group relative overflow-hidden rounded-2xl border border-border/80 bg-background/70 p-4 shadow-lg backdrop-blur"
+                >
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.25),_transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-[-40%] h-32 bg-gradient-to-t from-purple-500/40 via-transparent to-transparent blur-3xl" />
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-muted-foreground">{stat.label}</span>
+                    <span className="text-primary">{stat.icon}</span>
+                  </div>
+                  <p className="mt-2 text-2xl font-semibold">{stat.value}</p>
+                  <p className="text-sm text-muted-foreground leading-snug">{stat.desc}</p>
+                </motion.div>
               ))}
             </div>
           </motion.div>
@@ -142,9 +279,13 @@ export default function Portfolio() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.05 }}
           >
-            <Card className="rounded-3xl shadow-xl">
-              <CardContent className="p-6 md:p-8">
-                <div className="grid grid-cols-3 gap-4">
+            <Card className="relative overflow-hidden rounded-3xl border-0 bg-background/80 shadow-2xl">
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/20 via-purple-500/20 to-sky-500/20" />
+              <div className="pointer-events-none absolute -inset-24 -z-10 rounded-full bg-gradient-to-r from-primary/30 via-purple-500/20 to-cyan-400/20 blur-[180px]" />
+              <CardContent className="relative p-6 md:p-8">
+                <p className="text-sm uppercase tracking-wider text-muted-foreground">Core Focus</p>
+                <h2 className="mt-2 text-2xl font-semibold leading-tight">안정성과 속도를 동시에 잡는 운영 전략</h2>
+                <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
                   <Feature icon={<Server className="h-5 w-5" />} title="인프라" desc="EKS/RKE2 설계·운영" />
                   <Feature icon={<Boxes className="h-5 w-5" />} title="클러스터" desc="모니터링·로깅" />
                   <Feature icon={<Cloud className="h-5 w-5" />} title="클라우드" desc="AWS·GCP·VPC" />
@@ -158,7 +299,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      <Separator className="my-4" />
+      <Separator className="my-8" />
 
       {/* About */}
       <section id="about" className="mx-auto max-w-6xl px-4 py-8">
@@ -176,10 +317,76 @@ export default function Portfolio() {
               대표 경험: 삼성전자 RCS DDO(2023–2024, EKS·Terraform·Argo),
               KB국민카드 MSP(2022–2023, EKS·GitLab CI/CD), 다수의 AD·보안 인프라 프로젝트 PL/PM 수행.
             </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {SKILLS.slice(0, 8).map((skill) => (
+                <div key={skill} className="relative overflow-hidden rounded-2xl border border-border/70 bg-background/80 px-4 py-3 shadow-sm">
+                  <span className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-primary/50 via-sky-500/50 to-purple-500/50" />
+                  <p className="text-sm font-medium">{skill}</p>
+                  <p className="text-xs text-muted-foreground">핵심 역량</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
-      
+
+      {/* Experience */}
+      <section className="mx-auto max-w-6xl px-4 py-10">
+        <div className="grid gap-6 md:grid-cols-[280px_1fr]">
+          <div>
+            <h2 className="text-2xl font-bold">경력 하이라이트</h2>
+            <p className="mt-2 text-muted-foreground text-sm">
+              팀 빌딩부터 배포 자동화, 가시성 확보까지 엔드투엔드로 리드한 프로젝트들을 요약했습니다.
+            </p>
+          </div>
+          <div className="relative">
+            <div className="absolute left-4 top-0 bottom-0 hidden w-px bg-gradient-to-b from-primary/60 via-purple-500/40 to-sky-500/60 md:block" />
+            <div className="space-y-6">
+              {EXPERIENCES.map((exp, idx) => (
+                <motion.div
+                  key={exp.role}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  className="relative md:pl-12"
+                >
+                  <span className="absolute left-0 hidden h-3 w-3 -translate-x-[5px] rounded-full bg-gradient-to-br from-primary via-purple-500 to-sky-500 shadow-[0_0_15px_rgba(99,102,241,0.4)] md:block" />
+                  <Card className="relative overflow-hidden rounded-2xl border border-border/70 bg-background/90 shadow-xl">
+                    <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.12),_transparent_55%)]" />
+                    <CardHeader className="pb-3">
+                      <CardDescription className="text-xs uppercase tracking-wider text-muted-foreground">
+                        {exp.period}
+                      </CardDescription>
+                      <CardTitle className="text-xl leading-tight">{exp.role}</CardTitle>
+                      <p className="text-sm text-muted-foreground">{exp.org}</p>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm leading-relaxed text-muted-foreground">{exp.summary}</p>
+                      <ul className="space-y-2 text-sm">
+                        {exp.highlights.map((highlight) => (
+                          <li key={highlight} className="flex items-start gap-2">
+                            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-primary via-purple-500 to-sky-500" />
+                            <span>{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        {exp.stack.map((item) => (
+                          <Badge key={item} variant="secondary" className="rounded-xl">
+                            {item}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Projects */}
       <section id="projects" className="mx-auto max-w-6xl px-4 py-8">
         <h2 className="text-2xl font-bold mb-4">선정 프로젝트</h2>
@@ -263,15 +470,19 @@ export default function Portfolio() {
         {filtered.length ? (
           <div className="grid md:grid-cols-3 gap-6">
             {filtered.map((p) => (
-              <Card key={p.title} className="rounded-2xl hover:shadow-lg transition-shadow">
+              <Card
+                key={p.title}
+                className="group relative overflow-hidden rounded-2xl border border-border/70 bg-background/80 transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-2xl"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-sky-500/10 to-purple-500/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">{p.title}</CardTitle>
-                  <CardDescription>{p.desc}</CardDescription>
+                  <CardTitle className="text-lg transition-colors group-hover:text-primary">{p.title}</CardTitle>
+                  <CardDescription className="leading-relaxed text-muted-foreground">{p.desc}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex flex-wrap gap-2">
                     {p.tags.map((t) => (
-                      <Badge key={t} variant="secondary" className="rounded-xl">
+                      <Badge key={t} variant="secondary" className="rounded-xl border-0 bg-gradient-to-r from-primary/15 via-purple-500/15 to-sky-500/15 text-foreground">
                         {t}
                       </Badge>
                     ))}
@@ -302,30 +513,46 @@ export default function Portfolio() {
         <h2 className="text-2xl font-bold mb-6">기술 스택</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
           {SKILLS.map((s) => (
-            <div key={s} className="border rounded-xl px-3 py-2 text-sm flex items-center justify-between">
-              <span>{s}</span>
-              <span className="h-2 w-2 rounded-full bg-primary/70" />
+            <div
+              key={s}
+              className="flex items-center justify-between rounded-2xl border border-border/70 bg-background/70 px-4 py-3 text-sm shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg"
+            >
+              <span className="font-medium">{s}</span>
+              <span className="h-2 w-2 rounded-full bg-gradient-to-r from-primary via-purple-500 to-sky-500" />
             </div>
           ))}
         </div>
       </section>
 
       {/* Contact */}
-      <section id="contact" className="mx-auto max-w-6xl px-4 py-8">
-        <Card className="rounded-3xl">
+      <section id="contact" className="mx-auto max-w-6xl px-4 py-12">
+        <Card className="relative overflow-hidden rounded-3xl border-0 bg-background/90 shadow-2xl">
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/15 via-purple-500/10 to-sky-500/10" />
+          <motion.div
+            className="pointer-events-none absolute -right-12 top-1/2 hidden h-64 w-64 -translate-y-1/2 rounded-full bg-gradient-to-br from-primary/30 via-purple-500/20 to-sky-500/30 blur-3xl sm:block"
+            animate={{
+              scale: [1, 1.05, 0.95, 1],
+              rotate: [0, -8, 6, 0],
+            }}
+            transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          />
           <CardHeader>
-            <CardTitle>프로젝트 문의</CardTitle>
-            <CardDescription>간단한 내용만 남겨주시면 빠르게 회신드리겠습니다.</CardDescription>
+            <Badge variant="outline" className="w-fit rounded-xl">Let's talk</Badge>
+            <CardTitle className="text-3xl">프로젝트 문의</CardTitle>
+            <CardDescription className="max-w-2xl text-base text-muted-foreground">
+              간단한 요구사항만 공유해주셔도 좋아요. 목표와 우선순위를 명확히 정리해
+              실행 전략을 제안드립니다.
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-3">
-              <Button asChild className="rounded-2xl">
+              <Button asChild className="rounded-2xl bg-gradient-to-r from-primary via-sky-500 to-purple-500 text-primary-foreground shadow-lg shadow-primary/20 transition hover:scale-[1.02]">
                 <a href="mailto:dslee1371@gmail.com"><Mail className="mr-2 h-4 w-4" />이메일 보내기</a>
               </Button>
-              <Button asChild variant="outline" className="rounded-2xl">
+              <Button asChild variant="outline" className="rounded-2xl border-primary/40 text-primary hover:bg-primary/10">
                 <a href="https://github.com/dslee1371" target="_blank" rel="noreferrer"><Github className="mr-2 h-4 w-4" />GitHub</a>
               </Button>
-              <Button asChild variant="outline" className="rounded-2xl">
+              <Button asChild variant="outline" className="rounded-2xl border-primary/40 text-primary hover:bg-primary/10">
                 <a href="#" target="_blank" rel="noreferrer"><Linkedin className="mr-2 h-4 w-4" />LinkedIn</a>
               </Button>
             </div>
@@ -359,8 +586,9 @@ export default function Portfolio() {
 
 function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className="rounded-2xl border p-4 flex items-start gap-3">
-      <div className="mt-1 text-primary">{icon}</div>
+    <div className="group relative flex items-start gap-3 overflow-hidden rounded-2xl border border-border/70 bg-background/70 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-lg">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-sky-500/10 to-purple-500/10 opacity-0 transition duration-300 group-hover:opacity-100" />
+      <div className="mt-1 text-primary drop-shadow">{icon}</div>
       <div>
         <p className="font-medium leading-tight">{title}</p>
         <p className="text-sm text-muted-foreground leading-snug">{desc}</p>
@@ -381,7 +609,13 @@ function IconLink({
   newTab?: boolean;
 }) {
   return (
-    <Button asChild variant="ghost" size="icon" className="rounded-xl" aria-label={label}>
+    <Button
+      asChild
+      variant="ghost"
+      size="icon"
+      className="rounded-xl transition hover:bg-gradient-to-br hover:from-primary/15 hover:via-sky-500/15 hover:to-purple-500/20 hover:text-primary"
+      aria-label={label}
+    >
       <a href={href} {...(newTab ? { target: "_blank", rel: "noreferrer" } : {})}>
         {children}
       </a>
